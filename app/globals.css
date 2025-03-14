@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, winter;
+  themes: light --default, dark --prefersdark;
 }
 @tailwind base;
 @tailwind components;
@@ -19,4 +19,15 @@
 body {
   color: rgb(var(--foreground-rgb));
   padding: 1rem;
+}
+
+@layer base {
+  .card {
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+
+  h1 {
+    @apply font-bold text-2xl mb-3;
+  }
 }
