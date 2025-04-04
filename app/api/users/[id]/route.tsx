@@ -1,24 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
+import { prisma } from "@/prisma/client";
 
 interface Props {
   params: { id: number };
 }
 
-export function GET(
+export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
-  if (params.id > 10) {
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   } else {
-    return NextResponse.json({ id: params.id, name: "John Doe" });
+    return NextResponse.json(user);
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
   const body = await request.json();
   const validation = schema.safeParse(body);
@@ -26,20 +31,40 @@ export async function PUT(
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
 
-  if (params.id > 10) {
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ id: params.id, name: body.name }, { status: 200 });
+  const updateUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      name: body.name,
+      email: body.email,
+    },
+  });
+
+  return NextResponse.json({ updateUser });
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) {
-  if (params.id > 10) {
+  const user = await prisma.user.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+
+  await prisma.user.delete({
+    where: { id: user.id },
+  });
 
   return NextResponse.json({ id: params.id, deleted: true }, { status: 200 });
 }
