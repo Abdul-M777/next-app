@@ -22,6 +22,7 @@
     "eslint": "9.22.0",
     "eslint-config-next": "15.2.2",
     "fast-sort": "^3.4.1",
+    "lodash": "^4.17.21",
     "module": "^1.2.5",
     "next": "^15.2.4",
     "next-auth": "^4.24.11",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/lodash": "^4.17.16",
     "autoprefixer": "^10.4.21",
     "daisyui": "^5.0.3",
     "postcss": "^8.5.3",
